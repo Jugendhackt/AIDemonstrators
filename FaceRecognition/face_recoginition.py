@@ -22,6 +22,38 @@ def random_string_generator(length):  # define the function and pass the length 
     return result
 
 
+adjectives = ['fluffy',
+              'cool',
+              'funny',
+              'angry',
+              'calm',
+              'crazy',
+              'brave',
+              'confused',
+              'bright',
+              'colorful',
+              'glamorous',
+              'fresh',
+              'legendary',
+              'fancy',
+              'magic'
+              ]
+
+substantives = ['unicorn',
+                'alpaca',
+                'tomato',
+                'apple',
+                'dolphin',
+                'crocodile',
+                'frog',
+                'fog',
+                'dream',
+                'butterfly',
+                'plasma',
+                'dragon',
+                'cloud'
+                ]
+
 video_capture = cv2.VideoCapture(0)
 #load face encodings in a database
 
@@ -80,7 +112,9 @@ while True:
             # if name is unknonwn add new person with random code into the database
             # switch  name to it
             if name == "Unknown":
-                name = random_string_generator(5)
+                new_adjective = random.choice(adjectives)
+                new_substantive = random.choice(substantives)
+                name = new_adjective + ' ' + new_substantive
                 # add new face to list
                 known_face_encodings.append(face_encoding)
                 known_face_names.append(name)
@@ -101,9 +135,9 @@ while True:
         cv2.rectangle(frame, (left, top), (right, bottom), (255, 0, 0), 2)
 
         # Draw a label with a name below the face
-        cv2.rectangle(frame, (left, bottom - 25), (right, bottom), (255, 0, 0), cv2.FILLED)
+        cv2.rectangle(frame, (left, bottom - 10), (right, bottom), (255, 0, 0), cv2.FILLED)
         font = cv2.FONT_HERSHEY_DUPLEX
-        cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.8, (255, 255, 255), 1)
+        cv2.putText(frame, name, (left + 2, bottom - 2), font, 0.8, (255, 255, 255), 1)
 
 
     # Display the resulting image
