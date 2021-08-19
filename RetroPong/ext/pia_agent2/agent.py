@@ -20,7 +20,8 @@ from collections import deque
 
 from time import sleep
 
-import ext.pia_agent2.rl_hands_on.ptan.ptan as ptan
+#import rl_hands_on.ptan.ptan as ptan
+from .rl_hands_on.ptan import ptan as ptan
 import cv2
 
 

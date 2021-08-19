@@ -18,8 +18,14 @@ import retro
 from ext.pia_agent2.agent import Agent, Discretizer, PongDiscretizer
 from ext.pia_agent2.rl_hands_on.ptan import ptan
 
+def render(frame, display, width=800, height=800, angle=-90):
+    frame = pygame.surfarray.make_surface(frame)
+    frame = pygame.transform.scale(frame, (width, height))
+    frame = pygame.transform.rotate(frame, angle)
+    display.blit(frame, (0,0))
+    pygame.display.flip()
 
-def start_pong(speed_factor = 2):
+def start_pong(speed_factor = 2, screen_width=800, screen_height=800):
     # set up controls for player 2
     # if availiable, grab gamepad else fall-back to keyboard (buttons up and down)
     joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
@@ -33,11 +39,13 @@ def start_pong(speed_factor = 2):
     env = ptan.common.wrappers.wrap_dqn(env)
     env = PongDiscretizer(env)
     state = env.reset()
+    gameDisplay = pygame.display.set_mode((screen_width,screen_height))
+    frame = env.render(mode='rgb_array')
+    render(frame, gameDisplay)
     done = False
     eps_reward = 0
     total_reward = []
     steps = 0
-
 
 
     ## Loading agent
@@ -84,20 +92,25 @@ def start_pong(speed_factor = 2):
                     continue # skip non-keyboard events
 
                 if event.key == pygame.K_UP:
+                    #print("Arrow up")
                     p2_action = 1
                 if event.key == pygame.K_DOWN:
+                    #print("Arrow down")
                     p2_action = 0
             keys = pygame.key.get_pressed()
             if keys[pygame.K_UP]:
+                #print("Arrow up")
                 p2_action = 1
             if keys[pygame.K_DOWN]:
+                #print("Arrow down")
                 p2_action = 0
 
         # take a step
         next_state, reward, _, info = env.step(p1_action, p2_action)
 
         # show game screen
-        env.render()
+        render(env.render(mode='rgb_array'), gameDisplay)
+        #render(env.render())
         steps += 1
 
         # sleep for 100ms as the game might be too fast w/o some sort of delay
@@ -131,4 +144,4 @@ if __name__ == '__main__':
     '''
 
     # start playing pong: Human vs AI
-    start_pong()
+    start_pong(speed_factor=0.7)
