@@ -169,6 +169,7 @@ class Agent():
         
         self.dqn = DuelingDQN(n_actions=3, input_shape=[4, 84, 84], nico_arch = nico_arch)                     # initilize the DQN,
         self.dqn.load_state_dict(torch.load(path, map_location=self.device))            # load the saved model at the specified location
+        self.dqn.to(self.device)
         self.dqn.eval()                                                                 # and freeze it
 
         # actions for retro
